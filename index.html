@@ -1521,7 +1521,78 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that better-received films will produce better-received and more profitable sequels. These films might continue the story of the franchise and be remembered just as well as the original, whereas the sequel to a poorly-received comedy might also be poorly-received, both critically and by people buying tickets.</p>
 <p>There are 731 movies in this data set released from 1973 to 2020. The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
 <p>If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>movies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"movies/movies.csv"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>sequels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"Sequels/priyankad0993-sequels/Movies - Cleaned.csv"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>movies</span></span></code></pre>
+</div>
+<pre><code># A tibble: 7,668 x 15
+   name   rating genre  year relea~1 score  votes direc~2 writer star 
+   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;
+ 1 The S~ R      Drama  1980 June 1~   8.4 9.27e5 Stanle~ Steph~ Jack~
+ 2 The B~ R      Adve~  1980 July 2~   5.8 6.5 e4 Randal~ Henry~ Broo~
+ 3 Star ~ PG     Acti~  1980 June 2~   8.7 1.2 e6 Irvin ~ Leigh~ Mark~
+ 4 Airpl~ PG     Come~  1980 July 2~   7.7 2.21e5 Jim Ab~ Jim A~ Robe~
+ 5 Caddy~ R      Come~  1980 July 2~   7.3 1.08e5 Harold~ Brian~ Chev~
+ 6 Frida~ R      Horr~  1980 May 9,~   6.4 1.23e5 Sean S~ Victo~ Bets~
+ 7 The B~ R      Acti~  1980 June 2~   7.9 1.88e5 John L~ Dan A~ John~
+ 8 Ragin~ R      Biog~  1980 Decemb~   8.2 3.3 e5 Martin~ Jake ~ Robe~
+ 9 Super~ PG     Acti~  1980 June 1~   6.8 1.01e5 Richar~ Jerry~ Gene~
+10 The L~ R      Biog~  1980 May 16~   7   1   e4 Walter~ Bill ~ Davi~
+# ... with 7,658 more rows, 5 more variables: country &lt;chr&gt;,
+#   budget &lt;dbl&gt;, gross &lt;dbl&gt;, company &lt;chr&gt;, runtime &lt;dbl&gt;, and
+#   abbreviated variable names 1: released, 2: director</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>sequels</span></span></code></pre>
+</div>
+<pre><code># A tibble: 866 x 12
+   Title    Relea~1  Year Descr~2 URL   IMDb ~3 Runti~4 Genres Num V~5
+   &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;lgl&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1 101 Dal~ 18-11-~  1996 NA      http~     5.7     103 Adven~   98439
+ 2 102 Dal~ 22-11-~  2000 NA      http~     4.9     100 Adven~   33823
+ 3 12 Roun~ 19-03-~  2009 NA      http~     5.6     108 Actio~   26828
+ 4 12 Roun~ 04-06-~  2013 NA      http~     5.3      95 Actio~    5141
+ 5 21 Jump~ 12-03-~  2012 NA      http~     7.2     109 Actio~  498876
+ 6 22 Jump~ 04-06-~  2014 NA      http~     7       112 Actio~  336672
+ 7 28 Days~ 01-11-~  2002 NA      http~     7.6     113 Drama~  366735
+ 8 28 Week~ 26-04-~  2007 NA      http~     7       100 Horro~  253260
+ 9 30 Days~ 16-10-~  2007 NA      http~     6.6     113 Actio~  160930
+10 48 Hrs.  08-12-~  1982 NA      http~     6.9      96 Actio~   66889
+# ... with 856 more rows, 3 more variables: Directors &lt;chr&gt;,
+#   `Movie Series` &lt;chr&gt;, Order &lt;dbl&gt;, and abbreviated variable names
+#   1: `Release Date`, 2: Description, 3: `IMDb Rating`,
+#   4: `Runtime (mins)`, 5: `Num Votes`</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies_sequels</span> <span class='op'>&lt;-</span> <span class='va'>sequels</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>movies</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Title"</span> <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>Year</span>, <span class='va'>`Movie Series`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>gross</span>, <span class='va'>rating</span>, <span class='va'>runtime</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>movies_sequels</span></span></code></pre>
+</div>
+<pre><code># A tibble: 697 x 8
+   Title             Year Movie S~1 Order budget  gross rating runtime
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1 101 Dalmatians    1996 101 Dalm~     1  7.5e7 3.21e8 G          103
+ 2 102 Dalmatians    2000 101 Dalm~     2  8.5e7 1.84e8 G          100
+ 3 12 Rounds         2009 12 Rounds     1  2.2e7 1.73e7 PG-13      108
+ 4 21 Jump Street    2012 21 Jump ~     1  4.2e7 2.02e8 R          109
+ 5 22 Jump Street    2014 21 Jump ~     2  5  e7 3.31e8 R          112
+ 6 28 Days Later...  2002 28 Days ~     1  8  e6 8.57e7 R          113
+ 7 28 Weeks Later    2007 28 Days ~     2  1.5e7 6.50e7 R          100
+ 8 30 Days of Night  2007 30 Days ~     1  3  e7 7.55e7 R          113
+ 9 48 Hrs.           1982 48 Hrs.       1  1.2e7 7.89e7 R           96
+10 Another 48 Hrs.   1990 48 Hrs.       2  3.8e7 1.54e8 R           93
+# ... with 687 more rows, and abbreviated variable name
+#   1: `Movie Series`</code></pre>
+</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

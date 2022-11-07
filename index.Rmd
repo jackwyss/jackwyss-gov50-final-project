@@ -18,3 +18,27 @@ There are 731 movies in this data set released from 1973 to 2020. The data notes
 If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened.
 
 
+```{r}
+
+library(tidyverse)
+
+movies <- read_csv("movies/movies.csv")
+
+sequels <- read_csv("Sequels/priyankad0993-sequels/Movies - Cleaned.csv")
+
+movies
+
+sequels
+
+movies_sequels <- sequels|>
+  left_join(movies, by = c("Title" = "name"))|>
+    select(Title, Year, `Movie Series`, Order, budget, gross, rating, runtime)|>
+  drop_na()
+
+
+movies_sequels
+
+
+
+```
+
