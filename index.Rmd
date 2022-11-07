@@ -26,19 +26,54 @@ movies <- read_csv("movies/movies.csv")
 
 sequels <- read_csv("Sequels/priyankad0993-sequels/Movies - Cleaned.csv")
 
-movies
-
-sequels
-
 movies_sequels <- sequels|>
-  left_join(movies, by = c("Title" = "name"))|>
-    select(Title, Year, `Movie Series`, Order, budget, gross, rating, runtime)|>
-  drop_na()
-
-
+  inner_join(movies, by = c("Title" = "name"))|>
+    select(Title, Year, `Movie Series`, `Runtime (mins)`, `IMDb Rating`, Order, budget, gross)
+  
 movies_sequels
 
+```
 
+
+```{r}
+
+numbermovies <- movies_sequels|>
+  group_by(`Movie Series`)|>
+  summarize(number_of_movies = n())
+
+  mean(numbermovies$number_of_movies)
+  
+```
+```{r}
+
+numbermovies_plot <- numbermovies|>
+  ggplot(mapping = aes(x = number_of_movies))+
+  geom_bar()+
+  labs(
+    title = "Number of Movies by Franchise",
+    x = "Number of Movies in the Franchise",
+    y = "Count"
+  )+
+  geom_vline(xintercept = mean(numbermovies$number_of_movies), color = "purple", size = 1.25)
+
+numbermovies_plot
+
+
+```
+
+```{r}
+
+movies_sequels|>
+  ggplot(mapping = aes(x = budget, y = gross))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE, color = "purple")+
+  labs(title = "Budget vs Box Office Gross",
+       x = "Budget",
+       y = "Gross"
+       )+
+  scale_x_log10()+
+  scale_y_log10()
+  
 
 ```
 

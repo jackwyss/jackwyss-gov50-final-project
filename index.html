@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","movies/movies.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.xlsx","Sequels/priyankad0993-sequels/Movies with sequels.csv"]}
+  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","movies/movies.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.xlsx","Sequels/priyankad0993-sequels/Movies with sequels.csv"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1529,70 +1529,70 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span></span>
 <span><span class='va'>sequels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"Sequels/priyankad0993-sequels/Movies - Cleaned.csv"</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>movies</span></span></code></pre>
-</div>
-<pre><code># A tibble: 7,668 x 15
-   name   rating genre  year relea~1 score  votes direc~2 writer star 
-   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;
- 1 The S~ R      Drama  1980 June 1~   8.4 9.27e5 Stanle~ Steph~ Jack~
- 2 The B~ R      Adve~  1980 July 2~   5.8 6.5 e4 Randal~ Henry~ Broo~
- 3 Star ~ PG     Acti~  1980 June 2~   8.7 1.2 e6 Irvin ~ Leigh~ Mark~
- 4 Airpl~ PG     Come~  1980 July 2~   7.7 2.21e5 Jim Ab~ Jim A~ Robe~
- 5 Caddy~ R      Come~  1980 July 2~   7.3 1.08e5 Harold~ Brian~ Chev~
- 6 Frida~ R      Horr~  1980 May 9,~   6.4 1.23e5 Sean S~ Victo~ Bets~
- 7 The B~ R      Acti~  1980 June 2~   7.9 1.88e5 John L~ Dan A~ John~
- 8 Ragin~ R      Biog~  1980 Decemb~   8.2 3.3 e5 Martin~ Jake ~ Robe~
- 9 Super~ PG     Acti~  1980 June 1~   6.8 1.01e5 Richar~ Jerry~ Gene~
-10 The L~ R      Biog~  1980 May 16~   7   1   e4 Walter~ Bill ~ Davi~
-# ... with 7,658 more rows, 5 more variables: country &lt;chr&gt;,
-#   budget &lt;dbl&gt;, gross &lt;dbl&gt;, company &lt;chr&gt;, runtime &lt;dbl&gt;, and
-#   abbreviated variable names 1: released, 2: director</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>sequels</span></span></code></pre>
-</div>
-<pre><code># A tibble: 866 x 12
-   Title    Relea~1  Year Descr~2 URL   IMDb ~3 Runti~4 Genres Num V~5
-   &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;lgl&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
- 1 101 Dal~ 18-11-~  1996 NA      http~     5.7     103 Adven~   98439
- 2 102 Dal~ 22-11-~  2000 NA      http~     4.9     100 Adven~   33823
- 3 12 Roun~ 19-03-~  2009 NA      http~     5.6     108 Actio~   26828
- 4 12 Roun~ 04-06-~  2013 NA      http~     5.3      95 Actio~    5141
- 5 21 Jump~ 12-03-~  2012 NA      http~     7.2     109 Actio~  498876
- 6 22 Jump~ 04-06-~  2014 NA      http~     7       112 Actio~  336672
- 7 28 Days~ 01-11-~  2002 NA      http~     7.6     113 Drama~  366735
- 8 28 Week~ 26-04-~  2007 NA      http~     7       100 Horro~  253260
- 9 30 Days~ 16-10-~  2007 NA      http~     6.6     113 Actio~  160930
-10 48 Hrs.  08-12-~  1982 NA      http~     6.9      96 Actio~   66889
-# ... with 856 more rows, 3 more variables: Directors &lt;chr&gt;,
-#   `Movie Series` &lt;chr&gt;, Order &lt;dbl&gt;, and abbreviated variable names
-#   1: `Release Date`, 2: Description, 3: `IMDb Rating`,
-#   4: `Runtime (mins)`, 5: `Num Votes`</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies_sequels</span> <span class='op'>&lt;-</span> <span class='va'>sequels</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>movies</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Title"</span> <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>Year</span>, <span class='va'>`Movie Series`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>gross</span>, <span class='va'>rating</span>, <span class='va'>runtime</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span></span>
-<span></span>
-<span></span>
+<span><span class='va'>movies_sequels</span> <span class='op'>&lt;-</span> <span class='va'>sequels</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>movies</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Title"</span> <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>Year</span>, <span class='va'>`Movie Series`</span>, <span class='va'>`Runtime (mins)`</span>, <span class='va'>`IMDb Rating`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>gross</span><span class='op'>)</span></span>
+<span>  </span>
 <span><span class='va'>movies_sequels</span></span></code></pre>
 </div>
-<pre><code># A tibble: 697 x 8
-   Title             Year Movie S~1 Order budget  gross rating runtime
-   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
- 1 101 Dalmatians    1996 101 Dalm~     1  7.5e7 3.21e8 G          103
- 2 102 Dalmatians    2000 101 Dalm~     2  8.5e7 1.84e8 G          100
- 3 12 Rounds         2009 12 Rounds     1  2.2e7 1.73e7 PG-13      108
- 4 21 Jump Street    2012 21 Jump ~     1  4.2e7 2.02e8 R          109
- 5 22 Jump Street    2014 21 Jump ~     2  5  e7 3.31e8 R          112
- 6 28 Days Later...  2002 28 Days ~     1  8  e6 8.57e7 R          113
- 7 28 Weeks Later    2007 28 Days ~     2  1.5e7 6.50e7 R          100
- 8 30 Days of Night  2007 30 Days ~     1  3  e7 7.55e7 R          113
- 9 48 Hrs.           1982 48 Hrs.       1  1.2e7 7.89e7 R           96
-10 Another 48 Hrs.   1990 48 Hrs.       2  3.8e7 1.54e8 R           93
-# ... with 687 more rows, and abbreviated variable name
-#   1: `Movie Series`</code></pre>
+<pre><code># A tibble: 731 x 8
+   Title             Year Movie ~1 Runti~2 IMDb ~3 Order budget  gross
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+ 1 101 Dalmatians    1996 101 Dal~     103     5.7     1  7.5e7 3.21e8
+ 2 102 Dalmatians    2000 101 Dal~     100     4.9     2  8.5e7 1.84e8
+ 3 12 Rounds         2009 12 Roun~     108     5.6     1  2.2e7 1.73e7
+ 4 21 Jump Street    2012 21 Jump~     109     7.2     1  4.2e7 2.02e8
+ 5 22 Jump Street    2014 21 Jump~     112     7       2  5  e7 3.31e8
+ 6 28 Days Later...  2002 28 Days~     113     7.6     1  8  e6 8.57e7
+ 7 28 Weeks Later    2007 28 Days~     100     7       2  1.5e7 6.50e7
+ 8 30 Days of Night  2007 30 Days~     113     6.6     1  3  e7 7.55e7
+ 9 48 Hrs.           1982 48 Hrs.       96     6.9     1  1.2e7 7.89e7
+10 Another 48 Hrs.   1990 48 Hrs.       93     5.9     2  3.8e7 1.54e8
+# ... with 721 more rows, and abbreviated variable names
+#   1: `Movie Series`, 2: `Runtime (mins)`, 3: `IMDb Rating`</code></pre>
 </div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>numbermovies</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>`Movie Series`</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>number_of_movies <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>numbermovies</span><span class='op'>$</span><span class='va'>number_of_movies</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 2.137427</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>numbermovies_plot</span> <span class='op'>&lt;-</span> <span class='va'>numbermovies</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>number_of_movies</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_bar</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span></span>
+<span>    title <span class='op'>=</span> <span class='st'>"Number of Movies by Franchise"</span>,</span>
+<span>    x <span class='op'>=</span> <span class='st'>"Number of Movies in the Franchise"</span>,</span>
+<span>    y <span class='op'>=</span> <span class='st'>"Count"</span></span>
+<span>  <span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_abline.html'>geom_vline</a></span><span class='op'>(</span>xintercept <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>numbermovies</span><span class='op'>$</span><span class='va'>number_of_movies</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='st'>"purple"</span>, size <span class='op'>=</span> <span class='fl'>1.25</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>numbermovies_plot</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>budget</span>, y <span class='op'>=</span> <span class='va'>gross</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span>, color <span class='op'>=</span> <span class='st'>"purple"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Budget vs Box Office Gross"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"Budget"</span>,</span>
+<span>       y <span class='op'>=</span> <span class='st'>"Gross"</span></span>
+<span>       <span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_log10</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
