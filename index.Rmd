@@ -58,12 +58,11 @@ numbermovies_plot <- numbermovies|>
 
 numbermovies_plot
 
-
 ```
 
 ```{r}
 
-movies_sequels|>
+grossplot <- movies_sequels|>
   ggplot(mapping = aes(x = budget, y = gross))+
   geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "purple")+
@@ -74,6 +73,7 @@ movies_sequels|>
   scale_x_log10()+
   scale_y_log10()
   
+grossplot
 
 ```
 
