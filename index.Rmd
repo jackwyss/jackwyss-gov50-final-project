@@ -39,7 +39,8 @@ movies_sequels
 
 numbermovies <- movies_sequels|>
   group_by(`Movie Series`)|>
-  summarize(number_of_movies = n())
+  summarize(number_of_movies = n())|>
+  filter(number_of_movies > 1)
 
   mean(numbermovies$number_of_movies)
   
@@ -52,7 +53,8 @@ numbermovies_plot <- numbermovies|>
   labs(
     title = "Number of Movies by Franchise",
     x = "Number of Movies in the Franchise",
-    y = "Count"
+    y = "Count",
+    caption = "Note: Excludes franchises with only one movie in the dataset."
   )+
   geom_vline(xintercept = mean(numbermovies$number_of_movies), color = "purple", size = 1.25)
 
@@ -76,4 +78,5 @@ grossplot <- movies_sequels|>
 grossplot
 
 ```
+
 
