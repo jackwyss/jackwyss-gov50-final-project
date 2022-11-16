@@ -13,7 +13,7 @@ output:
 
 How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that better-received films will produce better-received and more profitable sequels. These films might continue the story of the franchise and be remembered just as well as the original, whereas the sequel to a poorly-received comedy might also be poorly-received, both critically and by people buying tickets.
 
-There are 731 movies in this data set released from 1973 to 2020. The data notes what franchise a film belongs to and the order in which it was released. For example, the original "Halloween" movie is given a value in the "Order" column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. **Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.**
+There are 731 movies released from 1973 to 2020 in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original "Halloween" movie is given a value in the "Order" column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. **Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.**
 
 If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened.
 
@@ -65,6 +65,7 @@ numbermovies_plot
 ```{r}
 
 grossplot <- movies_sequels|>
+  drop_na()|>
   ggplot(mapping = aes(x = budget, y = gross))+
   geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "purple")+
@@ -76,6 +77,42 @@ grossplot <- movies_sequels|>
   scale_y_log10()
   
 grossplot
+
+```
+
+
+```{r}
+
+
+movies_sequels <- movies_sequels|>
+  mutate(sequel_category = case_when(
+    Order == 1 ~ "First",
+    Order == 2 ~ "Second",
+    Order == 3 ~ "Third",
+    Order == 4 ~ "Fourth",
+    Order == 5 ~ "Fifth",
+    Order == 6 ~ "Sixth",
+    Order == 7 ~ "Seventh",
+    Order == 8 ~ "Eighth",
+    Order >= 9 ~ "Ninth +"),
+    is.sequel = if_else(Order == 1, "No", "Yes")
+  )
+
+has_sequels_tibble <- movies_sequels|>
+  group_by(`Movie Series`)|>
+  summarize(number_of_movies = n())|>
+  mutate(series.has.sequels = if_else(number_of_movies > 1, "Yes", "No"))
+
+movies_sequels_new <- movies_sequels|>
+inner_join(has_sequels_tibble, by = "Movie Series")
+
+movies_sequels_new|>
+  filter(series.has.sequels == "Yes")|>
+  group_by(is.sequel)|>
+  summarize(mean_gross = mean(gross, na.rm = TRUE))|>
+  ggplot(mapping = aes(x = is.sequel, y = mean_gross))+
+  geom_col()
+
 
 ```
 
