@@ -7,6 +7,12 @@ output:
     self_contained: false
 ---
 
+```{r}
+library(broom)
+library(infer)
+library(tidyverse)
+```
+
 
 
 ## Project Proposal
@@ -19,8 +25,6 @@ If box office return of the original and average box office return of sequels ar
 
 
 ```{r}
-
-library(tidyverse)
 
 movies <- read_csv("movies/movies.csv")
 
@@ -77,7 +81,6 @@ grossplot <- movies_sequels|>
   scale_y_log10()
   
 grossplot
-
 ```
 
 
