@@ -1521,13 +1521,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span></span>
 <span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/tidymodels/infer'>infer</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://moderndive.github.io/moderndive/'>moderndive</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://docs.ropensci.org/skimr/'>skimr</a></span><span class='op'>)</span></span>
 <span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<h2 id="project-proposal">Project Proposal</h2>
-<p>How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that better-received films will produce better-received and more profitable sequels. These films might continue the story of the franchise and be remembered just as well as the original, whereas the sequel to a poorly-received comedy might also be poorly-received, both critically and by people buying tickets.</p>
-<p>There are 731 movies released from 1973 to 2020 in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
+<h2 id="introduction">1. Introduction</h2>
+<p>How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that better-received films will produce better-received and more profitable sequels. These films might continue the story of the franchise and be remembered just as well as the original, whereas the sequel to a poorly-received comedy might also be poorly-received, both critically and by people buying tickets. This data is worth analyzing because movies and sequels are a continually relevant part of global cultural consumption and inform how we think about politics, news, and the arts.</p>
 <p>If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened.</p>
+<h2 id="data">2. Data</h2>
+<p>There are 731 movies released from 1973 to 2020 in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"movies/movies.csv"</span><span class='op'>)</span></span>
@@ -1536,13 +1539,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span></span>
 <span><span class='va'>movies_sequels</span> <span class='op'>&lt;-</span> <span class='va'>sequels</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>movies</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Title"</span> <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>Year</span>, <span class='va'>`Movie Series`</span>, <span class='va'>`Runtime (mins)`</span>, <span class='va'>`IMDb Rating`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>gross</span><span class='op'>)</span></span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>Year</span>, <span class='va'>`Movie Series`</span>, <span class='va'>`Runtime (mins)`</span>, <span class='va'>`IMDb Rating`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>gross</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>budget <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>budget</span><span class='op'>)</span>,</span>
+<span>         gross <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>gross</span><span class='op'>)</span><span class='op'>)</span></span>
 <span>  </span>
 <span><span class='va'>movies_sequels</span></span></code></pre>
 </div>
 <pre><code># A tibble: 731 x 8
    Title             Year Movie ~1 Runti~2 IMDb ~3 Order budget  gross
-   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;
  1 101 Dalmatians    1996 101 Dal~     103     5.7     1  7.5e7 3.21e8
  2 102 Dalmatians    2000 101 Dal~     100     4.9     2  8.5e7 1.84e8
  3 12 Rounds         2009 12 Roun~     108     5.6     1  2.2e7 1.73e7
@@ -1556,6 +1561,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 # ... with 721 more rows, and abbreviated variable names
 #   1: `Movie Series`, 2: `Runtime (mins)`, 3: `IMDb Rating`</code></pre>
 </div>
+<h2 id="analysis">3. Analysis</h2>
+<p><strong>a) Average Number of Movies in a Series</strong></p>
+<p>In this data set, movies are grouped by series, and each series has a certain number of movies. Some series have many sequels, and others are “one-and-done,” so to speak; there is only one movie in the series. The average number of movies in series that have sequels is about 2.82. You can see on the histogram below that many series have two or three movies, whereas some have up to 16.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>numbermovies</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
@@ -1582,8 +1590,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span></span>
 <span><span class='va'>numbermovies_plot</span></span></code></pre>
 </div>
-<p><img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
+<p><strong>b) Box Office Return (General)</strong></p>
+<p>There is a strong positive correlation (0.7764) between a movie’s budget and its box office return. As a movie’s budget increases, it will generally make more money at the box office.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>grossplot</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
@@ -1600,7 +1610,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  </span>
 <span><span class='va'>grossplot</span></span></code></pre>
 </div>
-<p><img src="index_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+<img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>budget</span>, <span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>gross</span>, use <span class='op'>=</span> <span class='st'>"pairwise"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 0.7764048</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1624,18 +1638,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>series.has.sequels <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span><span class='va'>number_of_movies</span> <span class='op'>&gt;</span> <span class='fl'>1</span>, <span class='st'>"Yes"</span>, <span class='st'>"No"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='va'>movies_sequels_new</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
-<span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>has_sequels_tibble</span>, by <span class='op'>=</span> <span class='st'>"Movie Series"</span><span class='op'>)</span></span>
-<span></span>
-<span><span class='va'>movies_sequels_new</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>series.has.sequels</span> <span class='op'>==</span> <span class='st'>"Yes"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>is.sequel</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>mean_gross <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>gross</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>is.sequel</span>, y <span class='op'>=</span> <span class='va'>mean_gross</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+<span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>has_sequels_tibble</span>, by <span class='op'>=</span> <span class='st'>"Movie Series"</span><span class='op'>)</span></span></code></pre>
 </div>
-<p><img src="index_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
 </div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p><strong>c) Box Office Return for Sequels vs Original</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
