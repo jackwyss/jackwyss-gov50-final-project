@@ -168,7 +168,7 @@ sequel_revenue_plot <- first_second_third|>
   geom_point()+
   geom_smooth(method = "lm", se = FALSE)+
   labs(
-    title = "Revenue of Sequels Relative to First Film Revenue",
+    title = "Revenue of Sequels vs First Film Revenue",
     x = "First Film Revenue",
     y = "Sequel Revenue"
   )
