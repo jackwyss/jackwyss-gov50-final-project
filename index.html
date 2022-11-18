@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","movies/movies.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.xlsx","Sequels/priyankad0993-sequels/Movies with sequels.csv"]}
+  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","movies/movies.csv","movies_metadata.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.xlsx","Sequels/priyankad0993-sequels/Movies with sequels.csv"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1533,47 +1533,73 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>There are 731 movies released from 1973 to 2020 in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"movies/movies.csv"</span><span class='op'>)</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"movies_metadata.csv"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>budget</span>, <span class='va'>overview</span>, <span class='va'>title</span>, <span class='va'>revenue</span>, <span class='va'>release_date</span>, <span class='va'>runtime</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>release_date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>release_date</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='va'>sequels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"Sequels/priyankad0993-sequels/Movies - Cleaned.csv"</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>movies_sequels</span> <span class='op'>&lt;-</span> <span class='va'>sequels</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>movies</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Title"</span> <span class='op'>=</span> <span class='st'>"name"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>Year</span>, <span class='va'>`Movie Series`</span>, <span class='va'>`Runtime (mins)`</span>, <span class='va'>`IMDb Rating`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>gross</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>budget <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>budget</span><span class='op'>)</span>,</span>
-<span>         gross <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>gross</span><span class='op'>)</span><span class='op'>)</span></span>
-<span>  </span>
-<span><span class='va'>movies_sequels</span></span></code></pre>
+<span><span class='va'>sequels</span></span></code></pre>
 </div>
-<pre><code># A tibble: 731 x 8
-   Title             Year Movie ~1 Runti~2 IMDb ~3 Order budget  gross
-   &lt;chr&gt;            &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;  &lt;int&gt;
- 1 101 Dalmatians    1996 101 Dal~     103     5.7     1  7.5e7 3.21e8
- 2 102 Dalmatians    2000 101 Dal~     100     4.9     2  8.5e7 1.84e8
- 3 12 Rounds         2009 12 Roun~     108     5.6     1  2.2e7 1.73e7
- 4 21 Jump Street    2012 21 Jump~     109     7.2     1  4.2e7 2.02e8
- 5 22 Jump Street    2014 21 Jump~     112     7       2  5  e7 3.31e8
- 6 28 Days Later...  2002 28 Days~     113     7.6     1  8  e6 8.57e7
- 7 28 Weeks Later    2007 28 Days~     100     7       2  1.5e7 6.50e7
- 8 30 Days of Night  2007 30 Days~     113     6.6     1  3  e7 7.55e7
- 9 48 Hrs.           1982 48 Hrs.       96     6.9     1  1.2e7 7.89e7
-10 Another 48 Hrs.   1990 48 Hrs.       93     5.9     2  3.8e7 1.54e8
-# ... with 721 more rows, and abbreviated variable names
-#   1: `Movie Series`, 2: `Runtime (mins)`, 3: `IMDb Rating`</code></pre>
+<pre><code># A tibble: 866 x 12
+   Title    Relea~1  Year Descr~2 URL   IMDb ~3 Runti~4 Genres Num V~5
+   &lt;chr&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;lgl&gt;   &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1 101 Dal~ 18-11-~  1996 NA      http~     5.7     103 Adven~   98439
+ 2 102 Dal~ 22-11-~  2000 NA      http~     4.9     100 Adven~   33823
+ 3 12 Roun~ 19-03-~  2009 NA      http~     5.6     108 Actio~   26828
+ 4 12 Roun~ 04-06-~  2013 NA      http~     5.3      95 Actio~    5141
+ 5 21 Jump~ 12-03-~  2012 NA      http~     7.2     109 Actio~  498876
+ 6 22 Jump~ 04-06-~  2014 NA      http~     7       112 Actio~  336672
+ 7 28 Days~ 01-11-~  2002 NA      http~     7.6     113 Drama~  366735
+ 8 28 Week~ 26-04-~  2007 NA      http~     7       100 Horro~  253260
+ 9 30 Days~ 16-10-~  2007 NA      http~     6.6     113 Actio~  160930
+10 48 Hrs.  08-12-~  1982 NA      http~     6.9      96 Actio~   66889
+# ... with 856 more rows, 3 more variables: Directors &lt;chr&gt;,
+#   `Movie Series` &lt;chr&gt;, Order &lt;dbl&gt;, and abbreviated variable names
+#   1: `Release Date`, 2: Description, 3: `IMDb Rating`,
+#   4: `Runtime (mins)`, 5: `Num Votes`</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies_sequels</span> <span class='op'>&lt;-</span> <span class='va'>sequels</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>movies</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Title"</span> <span class='op'>=</span> <span class='st'>"title"</span>, <span class='st'>"Runtime (mins)"</span> <span class='op'>=</span> <span class='st'>"runtime"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>Title</span>, <span class='va'>`Movie Series`</span>, <span class='va'>`IMDb Rating`</span>, <span class='va'>Order</span>, <span class='va'>budget</span>, <span class='va'>overview</span>, <span class='va'>revenue</span>, <span class='va'>`Runtime (mins)`</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>budget <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>budget</span><span class='op'>)</span>,</span>
+<span>         revenue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>revenue</span><span class='op'>)</span>,</span>
+<span>         Order <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>Order</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>series <span class='op'>=</span> <span class='va'>`Movie Series`</span>,</span>
+<span>         rating <span class='op'>=</span> <span class='va'>`IMDb Rating`</span><span class='op'>)</span></span>
+<span><span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>series</span> <span class='op'>==</span> <span class='st'>"Halloween"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 11 x 8
+   Title            series rating Order budget overv~1 revenue Runti~2
+   &lt;chr&gt;            &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt;
+ 1 Halloween        Hallo~    7.8 1      3  e5 In Joh~  7   e7      91
+ 2 Halloween II     Hallo~    6.5 2      2.5e6 After ~  2.55e7      92
+ 3 Halloween III: ~ Hallo~    4.9 3      2.5e6 Dr. Da~  1.44e7      98
+ 4 Halloween 4: Th~ Hallo~    5.9 4      5  e6 The le~  1.78e7      88
+ 5 Halloween 5: Th~ Hallo~    5.2 5      5  e6 Presum~  1.16e7      96
+ 6 Halloween: The ~ Hallo~    4.9 6     NA     &lt;NA&gt;    NA           87
+ 7 Halloween H20: ~ Hallo~    5.8 7     NA     &lt;NA&gt;    NA           86
+ 8 Halloween: Resu~ Hallo~    4   8      1.3e7 Serial~  3.77e7      94
+ 9 Halloween        Hallo~    6.1 9      1.5e7 After ~  8.03e7     109
+10 Halloween II     Hallo~    4.9 10     1.5e7 Laurie~  3.94e7     105
+11 Halloween        Hallo~    6.6 11    NA     &lt;NA&gt;    NA          106
+# ... with abbreviated variable names 1: overview,
+#   2: `Runtime (mins)`</code></pre>
 </div>
 <h2 id="analysis">3. Analysis</h2>
 <p><strong>a) Average Number of Movies in a Series</strong></p>
-<p>In this data set, movies are grouped by series, and each series has a certain number of movies. Some series have many sequels, and others are “one-and-done,” so to speak; there is only one movie in the series. The average number of movies in series that have sequels is about 2.82. You can see on the histogram below that many series have two or three movies, whereas some have up to 16.</p>
+<p>In this data set, movies are grouped by series, and each series has a certain number of movies. Some series have many sequels, and others are “one-and-done,” so to speak; there is only one movie in the series. The average number of movies in series that have sequels is about 2.88. You can see on the histogram below that many series have two or three movies, whereas some have 10 or more.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>numbermovies</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>`Movie Series`</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>series</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>number_of_movies <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>number_of_movies</span> <span class='op'>&gt;</span> <span class='fl'>1</span><span class='op'>)</span></span>
 <span></span>
 <span>  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>numbermovies</span><span class='op'>$</span><span class='va'>number_of_movies</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>[1] 2.817757</code></pre>
+<pre><code>[1] 2.881679</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1593,28 +1619,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
 <p><strong>b) Box Office Return (General)</strong></p>
-<p>There is a strong positive correlation (0.7764) between a movie’s budget and its box office return. As a movie’s budget increases, it will generally make more money at the box office.</p>
+<p>There is a strong positive correlation (0.7931) between a movie’s budget and its box office return. As a movie’s budget increases, it will generally make more money at the box office.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>grossplot</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>budget</span>, y <span class='op'>=</span> <span class='va'>gross</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>budget</span>, y <span class='op'>=</span> <span class='va'>revenue</span>, color <span class='op'>=</span> <span class='va'>Order</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span>, color <span class='op'>=</span> <span class='st'>"purple"</span><span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Budget vs Box Office Gross"</span>,</span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Budget vs Box Office Revenue"</span>,</span>
 <span>       x <span class='op'>=</span> <span class='st'>"Budget"</span>,</span>
-<span>       y <span class='op'>=</span> <span class='st'>"Gross"</span></span>
-<span>       <span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_log10</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span>       y <span class='op'>=</span> <span class='st'>"Revenue"</span></span>
+<span>       <span class='op'>)</span></span>
 <span>  </span>
 <span><span class='va'>grossplot</span></span></code></pre>
 </div>
 <img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" />
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>budget</span>, <span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>gross</span>, use <span class='op'>=</span> <span class='st'>"pairwise"</span><span class='op'>)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>budget</span>, <span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>revenue</span>, use <span class='op'>=</span> <span class='st'>"pairwise"</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>[1] 0.7764048</code></pre>
+<pre><code>[1] 0.7783911</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1633,16 +1657,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='op'>)</span></span>
 <span></span>
 <span><span class='va'>has_sequels_tibble</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>`Movie Series`</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>series</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>number_of_movies <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>series.has.sequels <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span><span class='va'>number_of_movies</span> <span class='op'>&gt;</span> <span class='fl'>1</span>, <span class='st'>"Yes"</span>, <span class='st'>"No"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='va'>movies_sequels_new</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
-<span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>has_sequels_tibble</span>, by <span class='op'>=</span> <span class='st'>"Movie Series"</span><span class='op'>)</span></span></code></pre>
+<span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>inner_join</a></span><span class='op'>(</span><span class='va'>has_sequels_tibble</span>, by <span class='op'>=</span> <span class='st'>"series"</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <p><strong>c) Box Office Return for Sequels vs Original</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies_sequels_new</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>series.has.sequels</span> <span class='op'>==</span> <span class='st'>"Yes"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Order</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span><span class='va'>revenue</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>Order</span>,</span>
+<span>              values_from <span class='op'>=</span> <span class='va'>revenue</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 1 x 14
+  `1`    `10`   `11`   `12`  `13`  `14`  `2`   `3`   `4`   `5`   `6`  
+  &lt;list&gt; &lt;list&gt; &lt;list&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt;
+1 &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+# ... with 3 more variables: `7` &lt;list&gt;, `8` &lt;list&gt;, `9` &lt;list&gt;</code></pre>
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
