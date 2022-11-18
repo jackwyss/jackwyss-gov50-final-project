@@ -198,8 +198,6 @@ knitr::kable(lm_fst_tidy, col.names = c(
   "P-Value"
   ), digits = 3)
 
-
-
 ```
 
 
