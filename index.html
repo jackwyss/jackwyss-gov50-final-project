@@ -1530,7 +1530,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that better-received films will produce better-received and more profitable sequels. These films might continue the story of the franchise and be remembered just as well as the original, whereas the sequel to a poorly-received comedy might also be poorly-received, both critically and by people buying tickets. This data is worth analyzing because movies and sequels are a continually relevant part of global cultural consumption and inform how we think about politics, news, and the arts.</p>
 <p>If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened.</p>
 <h2 id="data">2. Data</h2>
-<p>There are 731 movies released from 1973 to 2020 in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
+<p>There are 869 movies in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the gross box office return of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the average gross box office return and average IMDb scores of any sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"movies_metadata.csv"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
@@ -1567,24 +1567,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>         Order <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>Order</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>series <span class='op'>=</span> <span class='va'>`Movie Series`</span>,</span>
 <span>         rating <span class='op'>=</span> <span class='va'>`IMDb Rating`</span><span class='op'>)</span></span>
-<span><span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>series</span> <span class='op'>==</span> <span class='st'>"Halloween"</span><span class='op'>)</span></span></code></pre>
+<span><span class='va'>movies_sequels</span></span></code></pre>
 </div>
-<pre><code># A tibble: 11 x 8
+<pre><code># A tibble: 869 x 8
    Title            series rating Order budget overv~1 revenue Runti~2
    &lt;chr&gt;            &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt;
- 1 Halloween        Hallo~    7.8 1      3  e5 In Joh~  7   e7      91
- 2 Halloween II     Hallo~    6.5 2      2.5e6 After ~  2.55e7      92
- 3 Halloween III: ~ Hallo~    4.9 3      2.5e6 Dr. Da~  1.44e7      98
- 4 Halloween 4: Th~ Hallo~    5.9 4      5  e6 The le~  1.78e7      88
- 5 Halloween 5: Th~ Hallo~    5.2 5      5  e6 Presum~  1.16e7      96
- 6 Halloween: The ~ Hallo~    4.9 6     NA     &lt;NA&gt;    NA           87
- 7 Halloween H20: ~ Hallo~    5.8 7     NA     &lt;NA&gt;    NA           86
- 8 Halloween: Resu~ Hallo~    4   8      1.3e7 Serial~  3.77e7      94
- 9 Halloween        Hallo~    6.1 9      1.5e7 After ~  8.03e7     109
-10 Halloween II     Hallo~    4.9 10     1.5e7 Laurie~  3.94e7     105
-11 Halloween        Hallo~    6.6 11    NA     &lt;NA&gt;    NA          106
-# ... with abbreviated variable names 1: overview,
+ 1 101 Dalmatians   101 D~    5.7 1      5.4e7 The Li~  3.21e8     103
+ 2 102 Dalmatians   101 D~    4.9 2      8.5e7 Get re~  1.84e8     100
+ 3 12 Rounds        12 Ro~    5.6 1      2  e7 When N~  1.73e7     108
+ 4 12 Rounds 2: Re~ 12 Ro~    5.3 2      4  e6 Nick M~  0           95
+ 5 21 Jump Street   21 Ju~    7.2 1      4.2e7 In hig~  2.02e8     109
+ 6 22 Jump Street   21 Ju~    7   2      5  e7 After ~  1.88e8     112
+ 7 28 Days Later... 28 Da~    7.6 1     NA     &lt;NA&gt;    NA          113
+ 8 28 Weeks Later   28 Da~    7   2      1.5e7 In thi~  6.42e7     100
+ 9 30 Days of Night 30 Da~    6.6 1      3  e7 This i~  7.55e7     113
+10 48 Hrs.          48 Hr~    6.9 1      1.2e7 A hard~  7.89e7      96
+# ... with 859 more rows, and abbreviated variable names 1: overview,
 #   2: `Runtime (mins)`</code></pre>
 </div>
 <h2 id="analysis">3. Analysis</h2>
@@ -1619,7 +1617,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
 <p><strong>b) Box Office Return (General)</strong></p>
-<p>There is a strong positive correlation (0.7931) between a movie’s budget and its box office return. As a movie’s budget increases, it will generally make more money at the box office.</p>
+<p>There is a strong positive correlation (0.7784) between a movie’s budget and its box office return. As a movie’s budget increases, it will generally make more money at the box office.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>grossplot</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
@@ -1671,15 +1669,23 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies_sequels_new</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>series.has.sequels</span> <span class='op'>==</span> <span class='st'>"Yes"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>Order</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span><span class='va'>revenue</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>Order</span>,</span>
-<span>              values_from <span class='op'>=</span> <span class='va'>revenue</span><span class='op'>)</span></span></code></pre>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span><span class='va'>revenue</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code># A tibble: 1 x 14
-  `1`    `10`   `11`   `12`  `13`  `14`  `2`   `3`   `4`   `5`   `6`  
-  &lt;list&gt; &lt;list&gt; &lt;list&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt; &lt;lis&gt;
-1 &lt;int&gt;  &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
-# ... with 3 more variables: `7` &lt;list&gt;, `8` &lt;list&gt;, `9` &lt;list&gt;</code></pre>
+<pre><code># A tibble: 755 x 2
+# Groups:   Order [14]
+   Order   revenue
+   &lt;chr&gt;     &lt;int&gt;
+ 1 1     320689294
+ 2 1      17280326
+ 3 1     201585328
+ 4 1            NA
+ 5 1      78868508
+ 6 1     194647323
+ 7 1      60141683
+ 8 1      25504513
+ 9 1     171183863
+10 1     107217396
+# ... with 745 more rows</code></pre>
 </div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
