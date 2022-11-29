@@ -138,7 +138,7 @@ inner_join(has_sequels_tibble, by = "series")
 
 **c) Box Office Return for Sequels vs Original**
 
-The box-office revenue of sequels in a series are strongly, positively correlated (r = 0.7785) with the box-office revenue of the first film in the series: as the revenue of the first film increases, so, too, does the sequels' revenue. The slope of the least-squares regression line is 0.901, meaning that when the revenue of an original or first film increases by one dollar, the sequel revenue will increase by about $0.90. This result is statistically significant because p < 0.05. According to the r-squared value, about 60.6% of the variation in the data is explained by this model. However, I don't think there is a causal relationship between the first film's revenue and the sequel revenue -- in other words, a lot of revenue for the original film does not *cause* the sequels to have higher revenue. Perhaps there are other factors (e.g. critical reception) that influence the sequels' reception.
+The box-office revenue of sequels in a series has a strong positive correlation (r = 0.7753) with the box-office revenue of the first film in the series: as the revenue of the first film increases, so, too, does the sequels' revenue. The slope of the least-squares regression line is 0.9, meaning that when the revenue of an original or first film increases by one dollar, the sequel revenue will increase by about $0.90. This result is statistically significant because p < 0.05. According to the r-squared value, about 60.1% of the variation in the data is explained by this model. However, I don't think there is a causal relationship between the first film's revenue and the sequel revenue -- in other words, a lot of revenue for the original film does not *cause* the sequels to have higher revenue. Perhaps there are other factors (e.g. critical reception) that influence the sequels' reception.
 
 ```{r}
 
@@ -146,24 +146,26 @@ firstfilm <- movies_sequels_new|>
   drop_na()|>
   filter(series.has.sequels == "Yes")|>
   group_by(series, Order)|>
-  summarize(first_film_revenue = revenue)|>
+  summarize(first_film_revenue = revenue,
+            first_film_imdb = rating)|>
   filter(Order == 1)
 
 sequelfilms <- movies_sequels_new|>
   drop_na()|>
-  filter(series.has.sequels == "Yes",)|>
+  filter(series.has.sequels == "Yes")|>
   group_by(series, Order)|>
-  summarize(sequels_revenue = revenue)|>
+  summarize(sequels_revenue = revenue,
+            sequels_imdb = rating)|>
   filter(Order == 2 | Order == 3)
 
 first_second_third <- firstfilm|>
   inner_join(sequelfilms, by = c("series"))|>
-  rename(Order = Order.y)
+  rename(Order = Order.y)|>
+  filter(first_film_revenue > 10000 | sequels_revenue > 10000)
 
 first_second_third
 
 sequel_revenue_plot <- first_second_third|>
-  filter(first_film_revenue > 10000 | sequels_revenue > 10000)|>
   ggplot(first_second, mapping = aes(x = first_film_revenue, y = sequels_revenue, color = Order))+
   geom_point()+
   geom_smooth(method = "lm", se = FALSE)+
@@ -188,7 +190,7 @@ glance_lm <- glance(lm_fst)|>
 
 knitr::kable(glance_lm, col.names = c("R-Squared"), digits = 3)
 
-lm_fst_tidy <- broom::tidy(lm_fst)
+lm_fst_tidy <- tidy(lm_fst)
 
 knitr::kable(lm_fst_tidy, col.names = c(
   "Term",
@@ -200,4 +202,50 @@ knitr::kable(lm_fst_tidy, col.names = c(
 
 ```
 
+
+```{r}
+
+lm_reception <- lm(sequels_revenue ~ first_film_revenue + first_film_imdb, data = first_second_third)
+
+glance_lm_imdb <- glance(lm_reception)|>
+  select(adj.r.squared)
+
+knitr::kable(glance_lm_imdb, col.names = c("Adjusted R-Squared"), digits = 3)
+
+lm_reception_tidy <- tidy(lm_reception)
+
+knitr::kable(lm_reception_tidy, col.names = c(
+  "Term",
+  "Estimate",
+  "Standard Error",
+  "Statistic",
+  "P-Value"
+  ), digits = 3)
+
+```
+
+
+
+
+```{r}
+
+lm_reception2 <- lm(sequels_revenue ~ first_film_revenue + first_film_imdb + sequels_imdb, data = first_second_third)
+
+glance_lm_imdb2 <- glance(lm_reception2)|>
+  select(adj.r.squared)
+
+knitr::kable(glance_lm_imdb2, col.names = c("Adjusted R-Squared"), digits = 3)
+
+lm_reception2_tidy <- tidy(lm_reception2)
+
+knitr::kable(lm_reception2_tidy, col.names = c(
+  "Term",
+  "Estimate",
+  "Standard Error",
+  "Statistic",
+  "P-Value"
+  ), digits = 3)
+
+
+```
 
