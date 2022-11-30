@@ -10,6 +10,7 @@ output:
 ```{r setup}
 library(broom)
 library(infer)
+library(modelsummary)
 library(moderndive)
 library(skimr)
 library(tidyverse)
@@ -166,9 +167,9 @@ first_second_third <- firstfilm|>
 first_second_third
 
 sequel_revenue_plot <- first_second_third|>
-  ggplot(first_second, mapping = aes(x = first_film_revenue, y = sequels_revenue, color = Order))+
-  geom_point()+
-  geom_smooth(method = "lm", se = FALSE)+
+  ggplot(first_second, mapping = aes(x = first_film_revenue, y = sequels_revenue))+
+  geom_point(mapping = aes(color = Order))+
+  geom_smooth(method = "lm", se = FALSE, color = "purple")+
   labs(
     title = "Revenue of Sequels vs First Film Revenue",
     x = "First Film Revenue",
@@ -185,10 +186,10 @@ lm_fst <- lm(sequels_revenue ~ first_film_revenue, data = first_second_third)
 
 cor(first_second_third$first_film_revenue, first_second_third$sequels_revenue)
 
-glance_lm <- glance(lm_fst)|>
+glance_lm_fst <- glance(lm_fst)|>
   select(r.squared)
 
-knitr::kable(glance_lm, col.names = c("R-Squared"), digits = 3)
+knitr::kable(glance_lm_fst, col.names = c("R-Squared"), digits = 3)
 
 lm_fst_tidy <- tidy(lm_fst)
 
@@ -201,16 +202,16 @@ knitr::kable(lm_fst_tidy, col.names = c(
   ), digits = 3)
 
 ```
-
+**d) Multiple Regression Including 
 
 ```{r}
 
 lm_reception <- lm(sequels_revenue ~ first_film_revenue + first_film_imdb, data = first_second_third)
 
-glance_lm_imdb <- glance(lm_reception)|>
+glance_lm_reception <- glance(lm_reception)|>
   select(adj.r.squared)
 
-knitr::kable(glance_lm_imdb, col.names = c("Adjusted R-Squared"), digits = 3)
+knitr::kable(glance_lm_reception, col.names = c("Adjusted R-Squared"), digits = 3)
 
 lm_reception_tidy <- tidy(lm_reception)
 
@@ -231,10 +232,10 @@ knitr::kable(lm_reception_tidy, col.names = c(
 
 lm_reception2 <- lm(sequels_revenue ~ first_film_revenue + first_film_imdb + sequels_imdb, data = first_second_third)
 
-glance_lm_imdb2 <- glance(lm_reception2)|>
+glance_lm_reception2 <- glance(lm_reception2)|>
   select(adj.r.squared)
 
-knitr::kable(glance_lm_imdb2, col.names = c("Adjusted R-Squared"), digits = 3)
+knitr::kable(glance_lm_reception2, col.names = c("Adjusted R-Squared"), digits = 3)
 
 lm_reception2_tidy <- tidy(lm_reception2)
 
@@ -246,6 +247,13 @@ knitr::kable(lm_reception2_tidy, col.names = c(
   "P-Value"
   ), digits = 3)
 
+```
+
+```{r}
+
+modelsummary(list(lm_fst, lm_reception, lm_reception2),
+             gof_map = c("nobs", "r.squared","adj.r.squared"))
 
 ```
+
 
