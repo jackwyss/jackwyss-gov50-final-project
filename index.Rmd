@@ -26,7 +26,12 @@ If box office return of the original and average box office return of sequels ar
 
 ## 2. Data
 
-There are 869 movies in this data set. The data notes what franchise a film belongs to and the order in which it was released. For example, the original "Halloween" movie is given a value in the "Order" column of 1. The explanatory variables in this case are the box office revenue of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the box office revenue and IMDb scores of the original film's sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. **Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.**
+There are 869 movies in this data set, which I formed by joining two datasets:
+
+  A) a dataset containing information about movie series, including IMDb scores and the order of a film within a series
+  B) a dataset containing information about individual movies, including box office revenue, budget, and IMDb score. Unknown budgets or revenues are represented with a       value of zero.
+
+The data notes what franchise a film belongs to and the order in which it was released. For example, the original "Halloween" movie is given a value in the "Order" column of 1. The explanatory variables in this case are the box office revenue of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the box office revenue and IMDb scores of the original film's sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. **Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.**
 
 
 ```{r}
@@ -139,7 +144,9 @@ inner_join(has_sequels_tibble, by = "series")
 
 **c) Box Office Return for Sequels vs Original**
 
-The box-office revenue of sequels in a series has a strong positive correlation (r = 0.7753) with the box-office revenue of the first film in the series: as the revenue of the first film increases, so, too, does the sequels' revenue. The slope of the least-squares regression line is 0.9, meaning that when the revenue of an original or first film increases by one dollar, the sequel revenue will increase by about $0.90. This result is statistically significant because p < 0.05. According to the r-squared value, about 60.1% of the variation in the data is explained by this model. However, I don't think there is a causal relationship between the first film's revenue and the sequel revenue -- in other words, a lot of revenue for the original film does not *cause* the sequels to have higher revenue. Perhaps there are other factors (e.g. critical reception) that influence the sequels' reception.
+The model predicts that, when the first film has a revenue of zero,
+
+The box-office revenue of sequels in a series has a strong positive correlation (r = 0.7753) with the box-office revenue of the first film in the series: as the revenue of the first film increases, so, too, does the sequels' revenue. The slope of the least-squares regression line is 0.9, meaning that when the revenue of an original or first film increases by one dollar, the sequel revenue will increase by about $0.90 on average. This result is statistically significant because p < 0.05. According to the r-squared value, about 60.1% of the variation in the data is explained by this model. However, I don't think there is a causal relationship between the first film's revenue and the sequel revenue -- in other words, a lot of revenue for the original film does not *cause* the sequels to have higher revenue. Perhaps there are other factors (e.g. critical reception) that influence the sequels' reception.
 
 ```{r}
 
@@ -148,7 +155,8 @@ firstfilm <- movies_sequels_new|>
   filter(series.has.sequels == "Yes")|>
   group_by(series, Order)|>
   summarize(first_film_revenue = revenue,
-            first_film_imdb = rating)|>
+            first_film_imdb = rating,
+            first_film_budget = budget)|>
   filter(Order == 1)
 
 sequelfilms <- movies_sequels_new|>
@@ -156,7 +164,8 @@ sequelfilms <- movies_sequels_new|>
   filter(series.has.sequels == "Yes")|>
   group_by(series, Order)|>
   summarize(sequels_revenue = revenue,
-            sequels_imdb = rating)|>
+            sequels_imdb = rating,
+            sequels_budget = budget)|>
   filter(Order == 2 | Order == 3)
 
 first_second_third <- firstfilm|>
@@ -202,7 +211,11 @@ knitr::kable(lm_fst_tidy, col.names = c(
   ), digits = 3)
 
 ```
-**d) Multiple Regression Including 
+**d) Multiple Regression Including First Film Reception**
+
+When I controlled for the IMDb score of the first film, the adjusted R-squared value increased slightly from the R-squared value of the previous model (0.604 > 0.601). The model predicts that with every one-dollar increase in first-film revenue the sequel film revenue will increase by $8.65 on average when the first film's IMDb score is held constant. The p-value for this result is less than 0.05, so we know that it is significant.
+
+The model also predicts that with every 1-point increase in the first film's IMDb score sequel revenue will increase by about $28,000,000 on average. However, the p-value for this result is greater than 0.05 (0.067 > 0.05), meaning the result is *not* statistically significant. Combined with the very small increase in adjusted R-squared, this large p-value leads me to believe that there is another confounding variable present in the data set.
 
 ```{r}
 
@@ -225,8 +238,13 @@ knitr::kable(lm_reception_tidy, col.names = c(
 
 ```
 
+**e) Multiple Regression Including Reception of Both First Film and Sequel Films**
 
+I controlled for the sequel films' IMDb score because I realized that audience reception to the sequel film itself may be a better predictor of its box office return than the success of prior films. Immediately, we can see that the coefficient for the variable first_film_revenue decreased from 8.65 in the previous model to 8.60 in this model. The model predicts that, when the IMDb scores of the first film and sequels are held constant, a one-dollar increase in the revenue of the first film will result in an $8.60 increase in the revenue of the sequel on average. This result is significant because its p-value is almost zero (and therefore is less than 0.05). We learned in lecture that a decrease in the initial beta-value could mean that one of the other variables in multiple regression is a confounder.
 
+The model also predicts that, when first film revenue and sequel IMDb scores are held constant, a 1-point increase in the first film's IMDb score will result in about a $38,000,000 increase in sequel film revenue on average. Unlike in the previous model, the p-value for this coefficient is less than 0.05, so we can say that it is a significant result.
+
+Finally, the addition of the sequel film IMDb score in multiple regression led to an increase in the adjusted R-squared from 0.604 to 0.666. 66.6% of the variation in this data is explained by the model including first film revenue, first film IMDb score, and the sequels' IMDb score. The model therefore explains more variation in the data when sequel films' IMDb scores are included in regression. The model predicts that a 1-point increase in a sequel film's IMDb score will result in about a $93,000,000 increase in sequel film revenue on average when first film revenue and first film IMDb scores are held constant. The impact of an increase in sequel film's IMDb score on sequel revenues is much greater (in terms of sheer dollar amount) than an increase in the IMDb score of the first film in a series.
 
 ```{r}
 
