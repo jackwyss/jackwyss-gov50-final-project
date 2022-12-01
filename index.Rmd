@@ -20,7 +20,7 @@ library(tidyverse)
 
 ## 1. Introduction
 
-How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that better-received films will produce better-received and more profitable sequels. These films might continue the story of the franchise and be remembered just as well as the original, whereas the sequel to a poorly-received comedy might also be poorly-received, both critically and by people buying tickets. This data is worth analyzing because movies and sequels are a continually relevant part of global cultural consumption and inform how we think about politics, news, and the arts.
+How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that a sequel will perform better if the first film in the series is more critically successful. This data is worth analyzing because movies and sequels are a continually relevant part of global cultural consumption and inform how we think about politics, news, and the arts.
 
 If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened. I will focus only on the first, second, and third films in a series for convenience, but there are still interesting things to be discovered in the data despite this limitation.
 
@@ -30,6 +30,8 @@ There are 869 movies in this data set, which I formed by using left_join to comb
 
   A) a data set containing information about movie series, including IMDb scores and the order of a film within a series
   B) a data set containing information about individual movies, including box office revenue, budget, and IMDb score. Unknown budgets or revenues are represented with a value of zero.
+  
+I created a variable (first_film_gt7, for "greater than seven") that determines whether a film was generally well-received (IMDb score >= 7) or poorly-received (IMDb score < 7), which I will use to estimate the average effect on sequel performance of the first film in the series having good or poor ratings. This is a cross-sectional research design for an observational study.
 
 The data notes what franchise a film belongs to and the order in which it was released. For example, the original "Halloween" movie is given a value in the "Order" column of 1. The explanatory variables in this case are the box office revenue of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the box office revenue and IMDb scores of the original film's sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. **Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.**
 
@@ -47,10 +49,12 @@ movies_sequels <- sequels|>
     select(Title, `Movie Series`, `IMDb Rating`, Order, budget, overview, revenue, `Runtime (mins)`)|>
   mutate(budget = as.integer(budget),
          revenue = as.integer(revenue),
-    Order = as.character(Order))|>
+    Order = as.character(Order),
+    reception = if_else(`IMDb Rating` >= 7, "Good", "Poor"))|>
   rename(series = `Movie Series`,
          rating = `IMDb Rating`)
 
+mean(movies_sequels$rating, na.rm = TRUE)
 
 ```
 
@@ -96,7 +100,7 @@ There is a strong positive correlation (0.7784) between a movie's budget and its
 revenueplot <- movies_sequels|>
   drop_na()|>
   filter(budget > 10000 | revenue > 10000)|>
-  ggplot(mapping = aes(x = budget, y = revenue, color = Order))+
+  ggplot(mapping = aes(x = budget, y = revenue))+
   geom_point()+
   geom_smooth(method = "lm", se = FALSE, color = "purple")+
   labs(title = "Budget vs Box Office Revenue",
@@ -138,11 +142,9 @@ inner_join(has_sequels_tibble, by = "series")
 
 ```
 
-**c) Box Office Return for Sequels vs Original**
+**c) ATE of First Film Reception on Sequel Revenue**
 
-The model predicts that, when the first film has a revenue of zero,
-
-The box-office revenue of sequels in a series has a strong positive correlation (r = 0.7753) with the box-office revenue of the first film in the series: as the revenue of the first film increases, so, too, does the sequels' revenue. The slope of the least-squares regression line is 0.9, meaning that when the revenue of an original or first film increases by one dollar, the sequel revenue will increase by about $0.90 on average. This result is statistically significant because the p-value is nearly zero and therefore is less than an alpha-level of 0.05. We can reject the null hypothesis stating that sequel revenue is independent of first film revenue. According to the r-squared value, about 60.1% of the variation in the data is explained by this model. However, I don't think there is a causal relationship between the first film's revenue and the sequel revenue -- in other words, a lot of revenue for the original film does not *cause* the sequels to have higher revenue. Perhaps there are other factors (e.g. critical reception) that influence the sequels' reception.
+On average, sequel films whose original movie had an IMDb score greater than or equal to 7 had revenues that were 88% higher than sequel films whose original movie had an IMDb score less than 7. I chose 7 as the threshold for this test because the median first film IMDb score in the first_second_third data frame is 6.9.
 
 ```{r}
 
@@ -152,7 +154,8 @@ firstfilm <- movies_sequels_new|>
   group_by(series, Order)|>
   summarize(first_film_revenue = revenue,
             first_film_imdb = rating,
-            first_film_budget = budget)|>
+            first_film_budget = budget,
+            first_film_gt7 = if_else(first_film_imdb >= 7, "Yes", "No"))|>
   filter(Order == 1)
 
 sequelfilms <- movies_sequels_new|>
@@ -161,35 +164,77 @@ sequelfilms <- movies_sequels_new|>
   group_by(series, Order)|>
   summarize(sequels_revenue = revenue,
             sequels_imdb = rating,
-            sequels_budget = budget)|>
+            sequels_budget = budget,
+            sequels_gt7 = if_else(sequels_imdb >= 7, "Yes", "No"))|>
   filter(Order == 2 | Order == 3)
 
 first_second_third <- firstfilm|>
   inner_join(sequelfilms, by = c("series"))|>
   rename(Order = Order.y)|>
-  filter(first_film_revenue > 10000 | sequels_revenue > 10000)
+  filter(first_film_revenue > 10000 & sequels_revenue > 10000)
 
-first_second_third
+head(first_second_third)
 
-sequel_revenue_plot <- first_second_third|>
-  ggplot(first_second, mapping = aes(x = first_film_revenue, y = sequels_revenue))+
-  geom_point(mapping = aes(color = Order))+
-  geom_smooth(method = "lm", se = FALSE, color = "purple")+
-  labs(
-    title = "Revenue of Sequels vs First Film Revenue",
-    x = "First Film Revenue",
-    y = "Sequel Revenue"
-  )
+ate_good <- first_second_third|>
+  group_by(first_film_gt7)|>
+  summarize(mean_srevenue = mean(sequels_revenue, na.rm = TRUE))|>
+  pivot_wider(names_from = first_film_gt7, values_from = mean_srevenue)|>
+  mutate(ate = (Yes-No),
+         ate_pct = (Yes-No) / No)
 
-sequel_revenue_plot
+knitr::kable(ate_good, col.names = c("No", "Yes", "ATE", "ATE (Percent)"), digits = 3)
 
 ```
 
+The p-value for this average treatment effect is nearly zero, which is less than an alpha-level of 0.1, 0.05, and 0.01. I reject the null hypothesis that sequel films whose first film was well-received do not have a difference in revenue from sequel films whose first film was poorly-received. This means there is evidence for my original hypothesis, which states that well-received original films produce more successful sequels.
+
 ```{r}
 
-lm_fst <- lm(sequels_revenue ~ first_film_revenue, data = first_second_third)
+observed_ate <- first_second_third|>
+  specify(formula = sequels_revenue ~ first_film_gt7)|>
+  calculate(stat = "diff in means", order = c("Yes", "No"))
 
-cor(first_second_third$first_film_revenue, first_second_third$sequels_revenue)
+ATEtest <-  first_second_third|>
+  specify(formula = sequels_revenue ~ first_film_gt7)|>
+  hypothesize(null = "independence")|>
+  generate(reps = 5000, type = "permute")|>
+  calculate(stat = "diff in means", order = c("Yes", "No"))
+
+visualize(ATEtest)+
+  shade_p_value(obs_stat = observed_ate, direction = "both")+
+  labs(x = "Average Treatment Effect (in Dollars)",
+       y = "Count")
+  
+ATE_P <- ATEtest|>
+  get_p_value(obs_stat = observed_ate, direction = "both")
+
+knitr::kable(ATE_P, col.names = "P-Value", digits = 3)
+```
+
+**d) ATE of First Film Reception on Second and Third Film Revenue**
+
+I thought it might be the case that the treatment would affect films differently depending on their position in a franchise. On average, the revenues of a second film whose original movie had an IMDb score greater than or equal to 7 were 89.5% higher than the revenues of a second film whose original movie had an IMDb score less than 7. On average, the revenues of a third film whose original movie had an IMDb score greater than or equal to 7 were 63.9% higher than the revenues of a second film whose original movie had an IMDb score less than 7. A well-received original film appears to affect the revenues of second films more than the revenues of third films.
+
+```{r}
+
+ate_good <- first_second_third|>
+  group_by(first_film_gt7, Order)|>
+  summarize(mean_srevenue = mean(sequels_revenue, na.rm = TRUE))|>
+  pivot_wider(names_from = first_film_gt7, values_from = mean_srevenue)|>
+  mutate(ate = (Yes-No),
+         ate_pct = (Yes-No) / No)
+
+knitr::kable(ate_good, col.names = c("Order", "No", "Yes", "ATE", "ATE (Percent)"), digits = 3)
+
+```
+
+**e) Regression**
+
+I was worried about confounding variables in my data set. From the following regression, we can see that the R-squared value for this data is *very* low at only 0.068. This means only 6.8% of the variation in the data is explained by the regression model which includes only whether the first film in a series has an IMDb score of 7 or greater.
+
+```{r}
+
+lm_fst <- lm(sequels_revenue ~ first_film_gt7, data = first_second_third)
 
 glance_lm_fst <- glance(lm_fst)|>
   select(r.squared)
@@ -207,24 +252,21 @@ knitr::kable(lm_fst_tidy, col.names = c(
   ), digits = 3)
 
 ```
-**d) Multiple Regression Including First Film Reception**
 
-When I controlled for the IMDb score of the first film, the adjusted R-squared value increased slightly from the R-squared value of the previous model (0.604 > 0.601). The model predicts that with every one-dollar increase in first-film revenue the sequel film revenue will increase by $8.65 on average when the first film's IMDb score is held constant. The p-value for this result is less than 0.05, so we know that it is significant. We can reject the null hypothesis stating that sequel revenue is independent of first film revenue.
-
-The model also predicts that with every 1-point increase in the first film's IMDb score sequel revenue will increase by about $28,000,000 on average. However, the p-value for this result is greater than an alpha-level of 0.05 (0.067 > 0.05), meaning the result is *not* statistically significant. We fail to reject the null hypothesis stating that sequel film revenue and first film IMDb score are independent. Combined with the very small increase in adjusted R-squared, this large p-value leads me to believe that there is another confounding variable present in the data set.
+Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the original ATE to increase to 0.079. *This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.* Although the adjusted R-squared value for this model is still small, I would still say that my hypothesis has been weakened.
 
 ```{r}
 
-lm_reception <- lm(sequels_revenue ~ first_film_revenue + first_film_imdb, data = first_second_third)
+lm_multiple <- lm(sequels_revenue ~ first_film_gt7 + sequels_gt7, data = first_second_third)
 
-glance_lm_reception <- glance(lm_reception)|>
+glance_lm_multiple <- glance(lm_multiple)|>
   select(adj.r.squared)
 
-knitr::kable(glance_lm_reception, col.names = c("Adjusted R-Squared"), digits = 3)
+knitr::kable(glance_lm_multiple, col.names = c("Adjusted R-Squared"), digits = 3)
 
-lm_reception_tidy <- tidy(lm_reception)
+lm_multiple_tidy <- tidy(lm_multiple)
 
-knitr::kable(lm_reception_tidy, col.names = c(
+knitr::kable(lm_multiple_tidy, col.names = c(
   "Term",
   "Estimate",
   "Standard Error",
@@ -234,38 +276,11 @@ knitr::kable(lm_reception_tidy, col.names = c(
 
 ```
 
-**e) Multiple Regression Including Reception of Both First Film and Sequel Films**
 
-I controlled for the sequel films' IMDb score because I realized that audience reception to the sequel film itself may be a better predictor of its box office return than the success of prior films. Immediately, we can see that the coefficient for the variable first_film_revenue decreased from 8.65 in the previous model to 8.60 in this model. The model predicts that, when the IMDb scores of the first film and sequels are held constant, a one-dollar increase in the revenue of the first film will result in an $8.60 increase in the revenue of the sequel on average. This result is significant because its p-value is almost zero (and therefore is less than an alpha level of 0.05). We can reject the null hypothesis stating that sequel revenue is independent of first film revenue. We learned in lecture, however, that a decrease in the initial beta-value could mean that one of the other variables in multiple regression is a confounder.
-
-The model also predicts that, when first film revenue and sequel IMDb scores are held constant, a 1-point increase in the first film's IMDb score will result in about a $38,000,000 increase in sequel film revenue on average. Unlike in the previous model, the p-value for this coefficient is less than an alpha-level of 0.05, so we can reject the null hypothesis stating that sequel film revenue and first film IMDb score are independent.
-
-Finally, the addition of the sequel film IMDb score in multiple regression led to an increase in the adjusted R-squared from 0.604 to 0.666. 66.6% of the variation in this data is explained by the model including first film revenue, first film IMDb score, and the sequels' IMDb score. The model therefore explains more variation in the data when sequel films' IMDb scores are included in regression. The model predicts that a 1-point increase in a sequel film's IMDb score will result in about a $93,000,000 increase in sequel film revenue on average when first film revenue and first film IMDb scores are held constant. The impact of an increase in sequel film's IMDb score on sequel revenues is much greater (in terms of sheer dollar amount) than an increase in the IMDb score of the first film in a series. The p-value of this result is also nearly zero, meaning we can reject the null hypothesis stating that a sequel's revenue is independent of its IMDb score at an alpha-level of 0.05.
 
 ```{r}
 
-lm_reception2 <- lm(sequels_revenue ~ first_film_revenue + first_film_imdb + sequels_imdb, data = first_second_third)
-
-glance_lm_reception2 <- glance(lm_reception2)|>
-  select(adj.r.squared)
-
-knitr::kable(glance_lm_reception2, col.names = c("Adjusted R-Squared"), digits = 3)
-
-lm_reception2_tidy <- tidy(lm_reception2)
-
-knitr::kable(lm_reception2_tidy, col.names = c(
-  "Term",
-  "Estimate",
-  "Standard Error",
-  "Statistic",
-  "P-Value"
-  ), digits = 3)
-
-```
-
-```{r}
-
-modelsummary(list(lm_fst, lm_reception, lm_reception2),
+modelsummary(list(lm_fst, lm_multiple),
              gof_map = c("nobs", "r.squared","adj.r.squared"))
 
 ```
