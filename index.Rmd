@@ -26,10 +26,10 @@ If box office return of the original and average box office return of sequels ar
 
 ## 2. Data
 
-There are 869 movies in this data set, which I formed by using inner_join to combine two data sets:
+There are 869 movies in this data set, which I formed by using left_join to combine two data sets:
 
   A) a data set containing information about movie series, including IMDb scores and the order of a film within a series
-  B) a data set containing information about individual movies, including box office revenue, budget, and IMDb score. Unknown budgets or revenues are represented witha       value of zero.
+  B) a data set containing information about individual movies, including box office revenue, budget, and IMDb score. Unknown budgets or revenues are represented with a value of zero.
 
 The data notes what franchise a film belongs to and the order in which it was released. For example, the original "Halloween" movie is given a value in the "Order" column of 1. The explanatory variables in this case are the box office revenue of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the box office revenue and IMDb scores of the original film's sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. **Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.**
 
