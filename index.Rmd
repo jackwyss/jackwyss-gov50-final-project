@@ -190,6 +190,8 @@ The p-value for this average treatment effect is nearly zero, which is less than
 
 ```{r}
 
+set.seed(02138)
+
 observed_ate <- first_second_third|>
   specify(formula = sequels_revenue ~ first_film_gt7)|>
   calculate(stat = "diff in means", order = c("Yes", "No"))
@@ -234,6 +236,8 @@ I was worried about confounding variables in my data set. From the following reg
 
 ```{r}
 
+set.seed(02138)
+
 lm_fst <- lm(sequels_revenue ~ first_film_gt7, data = first_second_third)
 
 glance_lm_fst <- glance(lm_fst)|>
@@ -256,6 +260,8 @@ knitr::kable(lm_fst_tidy, col.names = c(
 Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the original ATE to increase to 0.079. *This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.* Although the adjusted R-squared value for this model is still small, I would still say that my hypothesis has been weakened.
 
 ```{r}
+
+set.seed(02138)
 
 lm_multiple <- lm(sequels_revenue ~ first_film_gt7 + sequels_gt7, data = first_second_third)
 
