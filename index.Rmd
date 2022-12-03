@@ -144,7 +144,7 @@ inner_join(has_sequels_tibble, by = "series")
 
 ```
 
-**c) ATE of First Film Reception on Sequel Revenue**
+**c) ATE of First Film Reception on Sequel Revenue**.
 
 ```{r}
 
@@ -174,7 +174,6 @@ first_second_third <- firstfilm|>
   filter(first_film_revenue > 10000 & sequels_revenue > 10000)
 
 head(first_second_third)
-
 
 ```
 From the following bar plot, it appears that the mean revenue for sequels whose original film had an IMDb score greater than or equal to 7 was higher than the mean revenue for sequel films whose original movie had an IMDb score less than 7.
