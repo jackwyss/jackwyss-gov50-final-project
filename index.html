@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/figure-html5/unnamed-chunk-7-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/kePrint-0.0.1/kePrint.js","index_files/lightable-0.0.1/lightable.css","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","movies/movies.csv","movies_metadata.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.xlsx","Sequels/priyankad0993-sequels/Movies with sequels.csv"]}
+  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/figure-html5/unnamed-chunk-5-1.png","index_files/figure-html5/unnamed-chunk-6-1.png","index_files/figure-html5/unnamed-chunk-7-1.png","index_files/figure-html5/unnamed-chunk-8-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/kePrint-0.0.1/kePrint.js","index_files/lightable-0.0.1/lightable.css","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","movies/movies.csv","movies_metadata.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.csv","Sequels/priyankad0993-sequels/Movies - Cleaned.xlsx","Sequels/priyankad0993-sequels/Movies with sequels.csv"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1530,16 +1530,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 </div>
 <h2 id="introduction">1. Introduction</h2>
-<p>How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. I hypothesize that a sequel will perform better if the first film in the series is more critically successful. This data is worth analyzing because movies and sequels are a continually relevant part of global cultural consumption and inform how we think about politics, news, and the arts.</p>
-<p>If box office return of the original and average box office return of sequels are positively correlated, then there is evidence for part of my hypothesis. If the IMDb score of the original and the average IMDb score of its sequels are positively correlated, there is evidence for the other part of my hypothesis. If there is a negative correlation or no correlation for either, my hypothesis will be weakened. I will focus only on the first, second, and third films in a series for convenience, but there are still interesting things to be discovered in the data despite this limitation.</p>
+<p>How do movie sequels compare to the original, in terms of box office return and audience reception? Does a better original film make for better sequels, or worse? Many people criticize the production of movie sequels, and yet studios keep making them. <strong>I hypothesize that a sequel will have a better box office performance if the first film in the series has a better reception from audiences.</strong> People might, for instance, remember that the first film was good and go see the sequel. This data is worth analyzing because movies and sequels are a continually relevant part of global cultural consumption and inform how we think about politics, news, and the arts.</p>
+<p>I created a variable (first_film_gt7, for “greater than seven”) that determines whether a film was generally well-received (IMDb score &gt;= 7) or poorly-received (IMDb score &lt; 7), which I will use to estimate the average effect on sequel performance of the first film in the series having good or poor ratings. This is a cross-sectional research design for an observational study. If the variable first_film_gt7 has a significant average treatment effect (that is to say, if sequels with well-received original films earn more on average than sequels with poorly-received original films), then there is evidence for my hypothesis. If I cannot reject the null hypothesis (ATE = 0) or if the ATE of first_film_gt7 is significant and <em>negative</em>, then my hypothesis will be weakened. I will focus only on the first, second, and third films in a series for convenience, but there are still interesting things to be discovered in the data despite this limitation.</p>
 <h2 id="data">2. Data</h2>
 <p>There are 869 movies in this data set, which I formed by using left_join to combine two data sets:</p>
 <ol type="A">
 <li>a data set containing information about movie series, including IMDb scores and the order of a film within a series</li>
 <li>a data set containing information about individual movies, including box office revenue, budget, and IMDb score. Unknown budgets or revenues are represented with a value of zero.</li>
 </ol>
-<p>I created a variable (first_film_gt7, for “greater than seven”) that determines whether a film was generally well-received (IMDb score &gt;= 7) or poorly-received (IMDb score &lt; 7), which I will use to estimate the average effect on sequel performance of the first film in the series having good or poor ratings. This is a cross-sectional research design for an observational study.</p>
-<p>The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variables in this case are the box office revenue of the original, measured in dollars, and the IMDb score of the original, measured on a scale of 1 to 10 (with 10 being the best). The response variables are the box office revenue and IMDb scores of the original film’s sequels. Since some sequels might be better-received than others, I will take the average gross box office return and IMDb score of the entire franchise after the first film. <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
+<p>The data notes what franchise a film belongs to and the order in which it was released. For example, the original “Halloween” movie is given a value in the “Order” column of 1. The explanatory variable in this case is the value of first_film_gt7. The response variable is the box office revenue of the original film’s sequels (the second and third movies in the franchise). <strong>Note that for movies released before IMDb existed the score is retroactive and may reflect modern consumer tastes rather than the tastes of people who went to see the movie in theaters.</strong></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>movies</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"movies_metadata.csv"</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
@@ -1556,11 +1555,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>    Order <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>Order</span><span class='op'>)</span>,</span>
 <span>    reception <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/if_else.html'>if_else</a></span><span class='op'>(</span><span class='va'>`IMDb Rating`</span> <span class='op'>&gt;=</span> <span class='fl'>7</span>, <span class='st'>"Good"</span>, <span class='st'>"Poor"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>series <span class='op'>=</span> <span class='va'>`Movie Series`</span>,</span>
-<span>         rating <span class='op'>=</span> <span class='va'>`IMDb Rating`</span><span class='op'>)</span></span>
-<span></span>
-<span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>rating</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+<span>         rating <span class='op'>=</span> <span class='va'>`IMDb Rating`</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>[1] 6.377176</code></pre>
 </div>
 <h2 id="analysis">3. Analysis</h2>
 <p><strong>a) Average Number of Movies in a Series</strong></p>
@@ -1593,30 +1589,42 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
 </div>
-<p><strong>b) Box Office Return (General)</strong></p>
-<p>There is a strong positive correlation (0.7784) between a movie’s budget and its box office return. As a movie’s budget increases, it will generally make more money at the box office. Note that I filtered both the budget and revenue of a film to be greater than $10,000 to avoid capturing movies that did not get a theatrical release, or whose budgets are unknown.</p>
+<p><strong>b) Reception and Box Office Return</strong></p>
+<p>There is a weak positive correlation (0.3934) between IMDb score and box office revenue. As a film’s IMDb score increases, it will generally earn more money. Note that I filtered both the budget and revenue of a film to be greater than $10,000 to avoid capturing movies that did not get a theatrical release, or whose budgets and revenues are unknown.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>revenueplot</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/drop_na.html'>drop_na</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>budget</span> <span class='op'>&gt;</span> <span class='fl'>10000</span> <span class='op'>|</span> <span class='va'>revenue</span> <span class='op'>&gt;</span> <span class='fl'>10000</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>budget</span>, y <span class='op'>=</span> <span class='va'>revenue</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>rating</span>, y <span class='op'>=</span> <span class='va'>revenue</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span>, color <span class='op'>=</span> <span class='st'>"purple"</span><span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Budget vs Box Office Revenue"</span>,</span>
-<span>       x <span class='op'>=</span> <span class='st'>"Budget"</span>,</span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"IMDb Rating vs Box Office Revenue"</span>,</span>
+<span>       x <span class='op'>=</span> <span class='st'>"IMDb Rating (1-10)"</span>,</span>
 <span>       y <span class='op'>=</span> <span class='st'>"Revenue"</span></span>
 <span>       <span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_log10</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span><span class='op'>)</span></span>
 <span>  </span>
 <span><span class='va'>revenueplot</span></span></code></pre>
 </div>
 <img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" />
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>budget</span>, <span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>revenue</span>, use <span class='op'>=</span> <span class='st'>"pairwise"</span><span class='op'>)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>correlation</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>rating</span>, <span class='va'>movies_sequels</span><span class='op'>$</span><span class='va'>revenue</span>, use <span class='op'>=</span> <span class='st'>"pairwise"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>correlation</span>, col.names <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Correlation Between IMDb Rating and Revenue"</span><span class='op'>)</span>, digits <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>[1] 0.7783911</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Correlation Between IMDb Rating and Revenue</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.393</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1644,7 +1652,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 </div>
 <p><strong>c) ATE of First Film Reception on Sequel Revenue</strong></p>
-<p>On average, sequel films whose original movie had an IMDb score greater than or equal to 7 had revenues that were 88% higher than sequel films whose original movie had an IMDb score less than 7. I chose 7 as the threshold for this test because the median first film IMDb score in the first_second_third data frame is 6.9.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>firstfilm</span> <span class='op'>&lt;-</span> <span class='va'>movies_sequels_new</span><span class='op'>|&gt;</span></span>
@@ -1688,8 +1695,28 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 #   and abbreviated variable names 1: first_film_revenue,
 #   2: first_film_imdb, 3: first_film_budget, 4: first_film_gt7,
 #   5: sequels_revenue, 6: sequels_imdb</code></pre>
+</div>
+<p>From the following bar plot, it appears that the mean revenue for sequels whose original film had an IMDb score greater than or equal to 7 was higher than the mean revenue for sequel films whose original movie had an IMDb score less than 7.</p>
+<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>ate_good</span> <span class='op'>&lt;-</span> <span class='va'>first_second_third</span><span class='op'>|&gt;</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>gt7_plot</span> <span class='op'>&lt;-</span> <span class='va'>first_second_third</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>first_film_gt7</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>mean_srevenue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>sequels_revenue</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>first_film_gt7</span>, y <span class='op'>=</span> <span class='va'>mean_srevenue</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span>  </span>
+<span></span>
+<span><span class='va'>gt7_plot</span></span></code></pre>
+</div>
+<p><img src="index_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<p>On average, sequel films whose original movie had an IMDb score greater than or equal to 7 had revenues that were 88% higher than sequel films whose original movie had an IMDb score less than 7. I chose 7 as the threshold for this test because the median first film IMDb score in the first_second_third data frame is 6.9.</p>
+<p>The p-value for this average treatment effect is nearly zero, which is less than an alpha-level of 0.1, 0.05, and 0.01. I reject the null hypothesis that sequel films whose first film was well-received do not have a difference in revenue from sequel films whose first film was poorly-received. This means there is evidence for my original hypothesis, which states that well-received original films produce more successful sequels.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>02138</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>ate_good</span> <span class='op'>&lt;-</span> <span class='va'>first_second_third</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>first_film_gt7</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span>mean_srevenue <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>sequels_revenue</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>first_film_gt7</span>, values_from <span class='op'>=</span> <span class='va'>mean_srevenue</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
@@ -1716,13 +1743,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </tr>
 </tbody>
 </table>
-</div>
-<p>The p-value for this average treatment effect is nearly zero, which is less than an alpha-level of 0.1, 0.05, and 0.01. I reject the null hypothesis that sequel films whose first film was well-received do not have a difference in revenue from sequel films whose first film was poorly-received. This means there is evidence for my original hypothesis, which states that well-received original films produce more successful sequels.</p>
-<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>02138</span><span class='op'>)</span></span>
-<span></span>
-<span><span class='va'>observed_ate</span> <span class='op'>&lt;-</span> <span class='va'>first_second_third</span><span class='op'>|&gt;</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>observed_ate</span> <span class='op'>&lt;-</span> <span class='va'>first_second_third</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/specify.html'>specify</a></span><span class='op'>(</span>formula <span class='op'>=</span> <span class='va'>sequels_revenue</span> <span class='op'>~</span> <span class='va'>first_film_gt7</span><span class='op'>)</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/calculate.html'>calculate</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"diff in means"</span>, order <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Yes"</span>, <span class='st'>"No"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span></span>
@@ -1737,7 +1759,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Average Treatment Effect (in Dollars)"</span>,</span>
 <span>       y <span class='op'>=</span> <span class='st'>"Count"</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-7-1.png" width="624" />
+<img src="index_files/figure-html5/unnamed-chunk-8-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>ATE_P</span> <span class='op'>&lt;-</span> <span class='va'>ATEtest</span><span class='op'>|&gt;</span></span>
 <span>  <span class='fu'><a href='https://infer.tidymodels.org/reference/get_p_value.html'>get_p_value</a></span><span class='op'>(</span>obs_stat <span class='op'>=</span> <span class='va'>observed_ate</span>, direction <span class='op'>=</span> <span class='st'>"both"</span><span class='op'>)</span></span>
@@ -1799,7 +1821,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </table>
 </div>
 <p><strong>e) Regression</strong></p>
-<p>I was worried about confounding variables in my data set. From the following regression, we can see that the R-squared value for this data is <em>very</em> low at only 0.068. This means only 6.8% of the variation in the data is explained by the regression model which includes only whether the first film in a series has an IMDb score of 7 or greater.</p>
+<p>I was worried about confounding variables in my data set. From the following regression, we can see that the R-squared value for this data is <em>very</em> low at only 0.068. This means only 6.8% of the variation in the data is explained by the regression model which includes only whether the first film in a series has an IMDb score of 7 or greater. The coefficient for first_film_gt7 is 157,608,048, meaning sequels whose first film has an IMDb score greater than or equal to 7 earn, on average, $157,608,048 more at the box office than sequels whose first film has an IMDb score less than 7.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>02138</span><span class='op'>)</span></span>
@@ -1862,7 +1884,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </tbody>
 </table>
 </div>
-<p>Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the original ATE to increase to 0.079. <em>This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.</em> Although the adjusted R-squared value for this model is still small, I would still say that my hypothesis has been weakened.</p>
+<p>Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. We can see that the coefficient for first_film_gt7 has decreased from 157,608,048 to 70,527,331 when we control for whether the sequel itself has an IMDb score of 7 or more. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the first_film_gt7 coefficient to increase to 0.079. <strong>This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.</strong> Although the adjusted R-squared value for this model is still small, I would still say that my hypothesis has been weakened. The addition of just one additional independent variable in regression has caused the ATE of first_film_gt7 to become insignificant at an alpha level of 0.05. I no longer believe there is a causal effect between the variable first_film_gt7 (whether the first film’s IMDb score is greater than or equal to 7) and sequel film revenue.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>02138</span><span class='op'>)</span></span>
@@ -1935,7 +1957,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://vincentarelbundock.github.io/modelsummary/reference/modelsummary.html'>modelsummary</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>lm_fst</span>, <span class='va'>lm_multiple</span><span class='op'>)</span>,</span>
-<span>             gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>,<span class='st'>"adj.r.squared"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+<span>             gof_map <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nobs"</span>, <span class='st'>"r.squared"</span>,<span class='st'>"adj.r.squared"</span>, <span class='st'>"p"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
@@ -2048,7 +2070,11 @@ R2 Adj.
 </tbody>
 </table>
 </div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h2 id="conclusion">4. Conclusion</h2>
+<p>I do not have enough evidence to conclude that good reception to the original film in a series (IMDb score &gt;= 7) will cause the second and third films in a series to earn more at the box office. Perhaps people decide to see sequel films in theaters based on their own merits rather than the quality of the original, given that sequels_gt7 is a confounding variable.</p>
+<p>Although it is the most convenient, IMDb score may not be the most comprehensive measure of a film’s audience reception (especially for films released before the website’s launch). People who rate movies on IMDb might have different biases than general audiences and might therefore rate certain kinds of movies higher or lower than general audiences. I do think that IMDb is more representative of the average moviegoer than websites such as Rotten Tomatoes, which tallies scores from professional movie critics. I am aware, however, that a film’s IMDb score is a limited measure of its quality.</p>
+<p>The data sets I found also lack information in some cases and were therefore difficult to merge: some films were represented in one data set but not the other, and some films did not have revenue data or IMDb score data. This caused some of the longer franchises (10 or so movies) to lose representation when I dropped NA values. Another problem when joining is that some franchises release new movies with the same names as their predecessors– for example, there are 3 movies in the Halloween franchise titled “Halloween”, not including re-releases. Limiting my analysis to the first, second, and third movies in the franchise helped to mitigate these problems. I would be able to analyze many more films and produce a more comprehensive result if I compiled all the data– including revenue, budget, and the franchise of each movie– myself, but that course of action was not possible given the scope of this project.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
