@@ -62,7 +62,7 @@ movies_sequels <- sequels|>
 **a) Average Number of Movies in a Series**
 
 
-In this data set, movies are grouped by series, and each series has a certain number of movies. Some series have many sequels, and others are "one-and-done," so to speak; there is only one movie in the series. The average number of movies in series that have sequels is about 2.88. You can see on the histogram below that many series have two or three movies, whereas some have 10 or more. For the purposes of this project, I will be focusing on the first, second, and third films in a series.
+In this data set, movies are grouped by series, and each series has a certain number of movies. Some series have many sequels, and others are "one-and-done," so to speak; there is only one movie in the series. The average number of movies in series that have sequels is about 2.882. You can see on the histogram below that many series have two or three movies, whereas some have 10 or more. For the purposes of this project, I will be focusing on the first, second, and third films in a series.
 
 ```{r}
 
@@ -71,7 +71,9 @@ numbermovies <- movies_sequels|>
   summarize(number_of_movies = n())|>
   filter(number_of_movies > 1)
 
-  mean(numbermovies$number_of_movies)
+  mean_num <- mean(numbermovies$number_of_movies)
+  
+  knitr::kable(mean_num, col.names = c("Average Number of Movies per Franchise"), digits = 3)
 ```
 ```{r}
 
