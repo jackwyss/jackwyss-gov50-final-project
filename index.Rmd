@@ -186,7 +186,10 @@ gt7_plot <- first_second_third|>
   group_by(first_film_gt7)|>
   summarize(mean_srevenue = mean(sequels_revenue, na.rm = TRUE))|>
   ggplot(mapping = aes(x = first_film_gt7, y = mean_srevenue))+
-  geom_col()
+  geom_col()+
+  labs(title = "Mean Sequel Revenue by First Film Reception",
+       x = "Does the original film have an IMDb score greater than or equal to 7?",
+       y = "Mean Sequel Revenue")
   
 
 gt7_plot
