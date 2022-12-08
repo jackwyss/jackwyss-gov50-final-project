@@ -1614,7 +1614,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_smooth.html'>geom_smooth</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"lm"</span>, se <span class='op'>=</span> <span class='cn'>FALSE</span>, color <span class='op'>=</span> <span class='st'>"purple"</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"IMDb Rating vs Box Office Revenue"</span>,</span>
 <span>       x <span class='op'>=</span> <span class='st'>"IMDb Rating (1-10)"</span>,</span>
-<span>       y <span class='op'>=</span> <span class='st'>"Revenue"</span></span>
+<span>       y <span class='op'>=</span> <span class='st'>"Revenue ($)"</span></span>
 <span>       <span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_log10</a></span><span class='op'>(</span><span class='op'>)</span></span>
 <span>  </span>
@@ -1719,7 +1719,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_bar.html'>geom_col</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Mean Sequel Revenue by First Film Reception"</span>,</span>
 <span>       x <span class='op'>=</span> <span class='st'>"Does the original film have an IMDb score greater than or equal to 7?"</span>,</span>
-<span>       y <span class='op'>=</span> <span class='st'>"Mean Sequel Revenue"</span><span class='op'>)</span></span>
+<span>       y <span class='op'>=</span> <span class='st'>"Mean Sequel Revenue ($)"</span><span class='op'>)</span></span>
 <span>  </span>
 <span></span>
 <span><span class='va'>gt7_plot</span></span></code></pre>
@@ -1900,7 +1900,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </tbody>
 </table>
 </div>
-<p>Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. We can see that the coefficient for first_film_gt7 has decreased from 157,608,048 to 70,527,331 when we control for whether the sequel itself has an IMDb score of 7 or more. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the first_film_gt7 coefficient to increase to 0.079. <strong>This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.</strong> Although the adjusted R-squared value for this model is still small, I would still say that my hypothesis has been weakened. The addition of just one additional independent variable in regression has caused the ATE of first_film_gt7 to become insignificant at an alpha level of 0.05. I no longer believe there is a causal effect between the variable first_film_gt7 (whether the first film’s IMDb score is greater than or equal to 7) and sequel film revenue.</p>
+<p>Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. We can see that the coefficient for first_film_gt7 has decreased from 157,608,048 to 70,527,331 when we control for whether the sequel itself has an IMDb score of 7 or more. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the first_film_gt7 coefficient to increase to 0.079. <strong>This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.</strong> Although the adjusted R-squared value for this model is still small, I would nevertheless say that my hypothesis has been weakened. The addition of just one additional independent variable in regression has caused the ATE of first_film_gt7 to become insignificant at an alpha level of 0.05. I no longer believe there is a causal effect between the variable first_film_gt7 (whether the first film’s IMDb score is greater than or equal to 7) and sequel film revenue.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>02138</span><span class='op'>)</span></span>

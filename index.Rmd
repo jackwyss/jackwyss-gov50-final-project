@@ -106,7 +106,7 @@ revenueplot <- movies_sequels|>
   geom_smooth(method = "lm", se = FALSE, color = "purple")+
   labs(title = "IMDb Rating vs Box Office Revenue",
        x = "IMDb Rating (1-10)",
-       y = "Revenue"
+       y = "Revenue ($)"
        )+
   scale_y_log10()
   
@@ -189,7 +189,7 @@ gt7_plot <- first_second_third|>
   geom_col()+
   labs(title = "Mean Sequel Revenue by First Film Reception",
        x = "Does the original film have an IMDb score greater than or equal to 7?",
-       y = "Mean Sequel Revenue")
+       y = "Mean Sequel Revenue ($)")
   
 
 gt7_plot
@@ -278,7 +278,7 @@ knitr::kable(lm_fst_tidy, col.names = c(
 
 ```
 
-Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. We can see that the coefficient for first_film_gt7 has decreased from 157,608,048 to 70,527,331 when we control for whether the sequel itself has an IMDb score of 7 or more. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the first_film_gt7 coefficient to increase to 0.079. **This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.** Although the adjusted R-squared value for this model is still small, I would still say that my hypothesis has been weakened. The addition of just one additional independent variable in regression has caused the ATE of first_film_gt7 to become insignificant at an alpha level of 0.05. I no longer believe there is a causal effect between the variable first_film_gt7 (whether the first film's IMDb score is greater than or equal to 7) and sequel film revenue.
+Including sequels_gt7, which tells whether the sequel film has an IMDb score greater than or equal to 7, increases the adjusted R-squared value to 0.254. This means that 25.4% of the variation in the data is explained by the model. We can see that the coefficient for first_film_gt7 has decreased from 157,608,048 to 70,527,331 when we control for whether the sequel itself has an IMDb score of 7 or more. Additionally, the inclusion of sequels_gt7 in the model causes the p-value of the first_film_gt7 coefficient to increase to 0.079. **This means we can no longer reject the null hypothesis stating that there is no difference in revenues for sequel films whose original films have IMDb scores greater than or equal to 7 and those whose original films have IMDb scores less than 7 at an alpha-level of 0.05, suggesting that sequels_gt7 is a confounding variable.** Although the adjusted R-squared value for this model is still small, I would nevertheless say that my hypothesis has been weakened. The addition of just one additional independent variable in regression has caused the ATE of first_film_gt7 to become insignificant at an alpha level of 0.05. I no longer believe there is a causal effect between the variable first_film_gt7 (whether the first film's IMDb score is greater than or equal to 7) and sequel film revenue.
 
 ```{r}
 
