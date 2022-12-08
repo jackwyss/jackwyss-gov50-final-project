@@ -225,7 +225,7 @@ ATEtest <-  first_second_third|>
 
 visualize(ATEtest)+
   shade_p_value(obs_stat = observed_ate, direction = "both")+
-  labs(x = "Average Treatment Effect (in Dollars)",
+  labs(x = "Average Treatment Effect ($)",
        y = "Count")
   
 ATE_P <- ATEtest|>
